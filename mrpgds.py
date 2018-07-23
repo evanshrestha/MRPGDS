@@ -1,40 +1,33 @@
-# MRPGDS.py
+# mrpgds.py
 
 import pygame
-from pygame.locals import *
 
-class App:
-    def __init__(self):
-        self._running = True
-        self._display_surf = None
-        self.size = self.weight, self.height = 800, 600
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+done = False
+is_blue = True
+x = 30
+y = 30
 
-    def on_init(self):
-        pygame.init()
-        self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self._running = True
+clock = pygame.time.Clock()
 
-    def on_event(self, event):
-        if event.type == pygame.QUIT:
-            self._running = False
-    def on_loop(self):
-        pass
-    def on_render(self):
-        pass
-    def on_cleanup(self):
-        pygame.quit()
+while not done:
+        for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                        done = True
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                        is_blue = not is_blue
 
-    def on_execute(self):
-        if self.on_init() == False:
-            self._running = False
+        pressed = pygame.key.get_pressed()
+        if pressed[pygame.K_UP] or pressed[pygame.K_w]: y -= 3
+        if pressed[pygame.K_DOWN] or pressed[pygame.K_s]: y += 3
+        if pressed[pygame.K_LEFT] or pressed[pygame.K_a]: x -= 3
+        if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]: x += 3
 
-        while( self._running ):
-            for event in pygame.event.get():
-                self.on_event(event)
-            self.on_loop()
-            self.on_render()
-        self.on_cleanup()
+        screen.fill((0,0,0))
+        if is_blue: color = (0, 128, 255)
+        else: color = (255, 100, 0)
+        pygame.draw.rect(screen, color, pygame.Rect(x, y, 60, 60))
 
-if __name__ == "__main__" :
-    game = App()
-    game.on_execute()
+        pygame.display.flip()
+        clock.tick(120)
