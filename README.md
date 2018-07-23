@@ -6,3 +6,5 @@ A multiplayer dating sim RPG created by Harold Nguyen, Jordan Bailey, Evan Shres
 Art by:
 
 Music by:
+
+Dedicated to Mr. Pigg, high school computer science teacher to three of us.
