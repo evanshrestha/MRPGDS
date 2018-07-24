@@ -4,7 +4,7 @@ import pygame
 
 
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 icon = pygame.image.load('res/heart favicon 256.png')
 pygame.display.set_icon(icon)
 is_blue = True
@@ -31,6 +31,9 @@ def handle_key_events(pressed):
     global player
     global clock
 
+    if pressed[pygame.K_ESCAPE]:
+        exit()
+
 
     # Key event listener
     if pressed[pygame.K_UP] or pressed[pygame.K_w]:
@@ -45,6 +48,7 @@ def handle_key_events(pressed):
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
         player.x_vel = player.speed
         player.orientation = "RIGHT"
+
 
     if pressed[pygame.K_LSHIFT]:
         player.sprint = True
