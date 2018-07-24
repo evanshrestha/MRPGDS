@@ -5,6 +5,8 @@ import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
+icon = pygame.image.load('res/heart favicon.png')
+pygame.display.set_icon(icon)
 is_blue = True
 x = 30
 y = 30
@@ -59,7 +61,7 @@ def handle_key_events(pressed):
 def main():
 
     done = False
-    
+
     global is_blue
     global x
     global y
