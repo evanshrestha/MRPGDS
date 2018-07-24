@@ -5,73 +5,58 @@ import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((800, 600))
-icon = pygame.image.load('res/heart favicon.png')
+icon = pygame.image.load('res/heart favicon 256.png')
 pygame.display.set_icon(icon)
 is_blue = True
-x = 30
-y = 30
-
-x_vel = 0
-y_vel = 0
-
-sprint = False
-
-init_speed = 3
-sprint_speed = 6
-
-speed = init_speed
-
-orientation = "UP"
 
 clock = pygame.time.Clock()
 
+
+class Player(object):
+    def __init__(self):
+        self.x = 30
+        self.y = 30
+        self.x_vel = 0
+        self.y_vel = 0
+        self.sprint = False
+        self.init_speed = 3
+        self.sprint_speed = 6
+        self.speed = self.init_speed
+        self.orientation = "UP"
+
+player = Player()
+
 def handle_key_events(pressed):
     global is_blue
-    global x
-    global y
-    global x_vel
-    global y_vel
-    global sprint
-    global init_speed
-    global sprint_speed
-    global speed
-    global orientation
+    global player
     global clock
 
 
     # Key event listener
     if pressed[pygame.K_UP] or pressed[pygame.K_w]:
-        y_vel = -speed
-        orientation = "UP"
+        player.y_vel = -player.speed
+        player.orientation = "UP"
     if pressed[pygame.K_DOWN] or pressed[pygame.K_s]:
-        y_vel = speed
-        orientation = "DOWN"
+        player.y_vel = player.speed
+        player.orientation = "DOWN"
     if pressed[pygame.K_LEFT] or pressed[pygame.K_a]:
-        x_vel = -speed
-        orientation = "LEFT"
+        player.x_vel = -player.speed
+        player.orientation = "LEFT"
     if pressed[pygame.K_RIGHT] or pressed[pygame.K_d]:
-        x_vel = speed
-        orientation = "RIGHT"
+        player.x_vel = player.speed
+        player.orientation = "RIGHT"
 
     if pressed[pygame.K_LSHIFT]:
-        sprint = True
+        player.sprint = True
     else:
-        sprint = False
+        player.sprint = False
 
 def main():
 
     done = False
 
     global is_blue
-    global x
-    global y
-    global x_vel
-    global y_vel
-    global sprint
-    global init_speed
-    global sprint_speed
-    global speed
-    global orientation
+    global player
     global clock
 
     while not done:
@@ -83,24 +68,24 @@ def main():
 
             handle_key_events(pygame.key.get_pressed())
 
-            if sprint:
-                speed = sprint_speed
+            if player.sprint:
+                player.speed = player.sprint_speed
             else:
-                speed = init_speed
+                player.speed = player.init_speed
 
             # Move player
-            y += y_vel
-            x += x_vel
+            player.y += player.y_vel
+            player.x += player.x_vel
 
             # Dampen movement
-            y_vel /= 1.2
-            x_vel /= 1.2
+            player.y_vel /= 1.2
+            player.x_vel /= 1.2
 
             # Draw to screen
             screen.fill((0,0,0))
             if is_blue: color = (0, 128, 255)
             else: color = (255, 100, 0)
-            pygame.draw.rect(screen, color, pygame.Rect(x, y, 60, 60))
+            pygame.draw.rect(screen, color, pygame.Rect(player.x, player.y, 60, 60))
 
             pygame.display.flip()
             clock.tick(120)
