@@ -7,38 +7,59 @@ entry point for game...
 '''
 
 import pygame
+from util import user_input
 
-# @evan hit me up I have a question about defining variables then instaintiating them
+class Game(object):
 
-#pre-defined variables
-clock = None
+    #pre-defined variables
+    display_flags = None
+    system_args = None
 
-#global variables
-tickrate = 20
-framerate = 60 # 0 = unlimited
-running = False
+    #global variables
+    clock = None
+    display = None
+    tickrate = 20 #not-used
+    framerate = 60 # 0 = unlimited
+    running = False
 
-def init():
-    #pseudo-contructor
-    pygame.init()
-    clock = pygame.time.Clock()
+    def __init__(self):
+        #contructor
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        self.display = pygame.display.set_mode((800,600))
 
-def update(delta): pass
-    # entry point for all loop logic
+        user_input.init(pygame, None)
 
-def render(): pass
-    # entry point for all graphics
+    def update(self, delta):
+        # entry point for all loop logic
+        # print(delta)
+        user_input.poll()
 
-def main():
+    def render(self):
+        # entry point for all graphics
+        self.display.fill((0,0,0))
+        pygame.display.flip()
 
-    init()
+    def run(self):
+        # mainloop
+        while self.running:
+            self.update(self.clock.get_time())
 
-    # mainloop
-    while running:
-        update(clock.get_time())
+            # render method ran based on clock
+            self.render()
+            self.clock.tick(self.framerate)
 
-        # render method ran based on clock
-        render()
-        clock.tick(framerate)
+    def start(self):
+        self.running = True
+        self.run()
 
-main()
+    def stop(self):
+        self.running = False
+
+# import system arguments if this is the entry point of the game
+if __name__ == "__main__":
+    import sys
+    system_args = sys.argv
+
+game = Game()
+game.start()
