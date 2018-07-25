@@ -7,45 +7,59 @@ entry point for game...
 '''
 
 import pygame
+from util import user_input
 
 class Game(object):
 
     #pre-defined variables
-    clock = pygame.time.Clock()
-
-    display = pygame.display.set_mode((800,600))
+    display_flags = None
+    system_args = None
 
     #global variables
-    tickrate = 20
+    clock = None
+    display = None
+    tickrate = 20 #not-used
     framerate = 60 # 0 = unlimited
-    running = True
+    running = False
 
     def __init__(self):
         #contructor
         pygame.init()
         self.clock = pygame.time.Clock()
+        self.display = pygame.display.set_mode((800,600))
+
+        user_input.init(pygame, None)
 
     def update(self, delta):
-        print(delta)
         # entry point for all loop logic
-        # for event in pygame.event.get():
-        #     if event
-        #     # keyboard.handle_event(event, pygame, self)
+        # print(delta)
+        user_input.poll()
 
     def render(self):
         # entry point for all graphics
         self.display.fill((0,0,0))
         pygame.display.flip()
 
-    def stop(self):
-        self.running = False
-
-    def main(self):
+    def run(self):
+        # mainloop
         while self.running:
             self.update(self.clock.get_time())
+
+            # render method ran based on clock
             self.render()
             self.clock.tick(self.framerate)
 
+    def start(self):
+        self.running = True
+        self.run()
+
+    def stop(self):
+        self.running = False
+
+# import system arguments if this is the entry point of the game
+if __name__ == "__main__":
+    import sys
+    system_args = sys.argv
 
 game = Game()
-game.main()
+game.start()
