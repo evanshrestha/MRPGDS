@@ -8,37 +8,44 @@ entry point for game...
 
 import pygame
 
-# @evan hit me up I have a question about defining variables then instaintiating them
+class Game(object):
 
-#pre-defined variables
-clock = None
-
-#global variables
-tickrate = 20
-framerate = 60 # 0 = unlimited
-running = False
-
-def init():
-    #pseudo-contructor
-    pygame.init()
+    #pre-defined variables
     clock = pygame.time.Clock()
 
-def update(delta): pass
-    # entry point for all loop logic
+    display = pygame.display.set_mode((800,600))
 
-def render(): pass
-    # entry point for all graphics
+    #global variables
+    tickrate = 20
+    framerate = 60 # 0 = unlimited
+    running = True
 
-def main():
+    def __init__(self):
+        #contructor
+        pygame.init()
+        self.clock = pygame.time.Clock()
 
-    init()
+    def update(self, delta):
+        print(delta)
+        # entry point for all loop logic
+        # for event in pygame.event.get():
+        #     if event
+        #     # keyboard.handle_event(event, pygame, self)
 
-    # mainloop
-    while running:
-        update(clock.get_time())
+    def render(self):
+        # entry point for all graphics
+        self.display.fill((0,0,0))
+        pygame.display.flip()
 
-        # render method ran based on clock
-        render()
-        clock.tick(framerate)
+    def stop(self):
+        self.running = False
 
-main()
+    def main(self):
+        while self.running:
+            self.update(self.clock.get_time())
+            self.render()
+            self.clock.tick(self.framerate)
+
+
+game = Game()
+game.main()
