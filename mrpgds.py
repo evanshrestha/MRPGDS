@@ -4,7 +4,7 @@ import pygame
 
 
 pygame.init()
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((800,600))
 icon = pygame.image.load('res/heart favicon 256.png')
 pygame.display.set_icon(icon)
 is_blue = True
