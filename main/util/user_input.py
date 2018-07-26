@@ -49,7 +49,7 @@ def poll():
     for event in game_lib.event.get():
 
         event_data = event.__dict__
-        print(event_data)
+        #print(event_data)
 
         if event.type == game_lib.QUIT:
             exit()
