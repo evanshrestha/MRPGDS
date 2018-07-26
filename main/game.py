@@ -6,17 +6,24 @@
 entry point for game...
 '''
 
+import sys
 import pygame
 from util import user_input
+from util import util
+from graphics.screen import Screen
 
 class Game(object):
 
+    #launch options
+    # TODO: set up switch case stype dict for launch options
+
     #pre-defined variables
-    display_flags = None
-    system_args = None
+    display_flags = 0
 
     #global variables
     clock = None
+    width = 800
+    height = 600
     display = None
     tickrate = 20 #not-used
     framerate = 60 # 0 = unlimited
@@ -26,7 +33,12 @@ class Game(object):
         #contructor
         pygame.init()
         self.clock = pygame.time.Clock()
-        self.display = pygame.display.set_mode((800,600))
+
+        # import system arguments if this is the entry point of the game
+        if __name__ == "__main__": self.handle_sys_args(sys.argv)
+
+        self.display = pygame.display.set_mode((self.width, self.height), self.display_flags)
+        screen = Screen(self.width, self.height)
 
         user_input.init(pygame, None)
 
@@ -56,10 +68,26 @@ class Game(object):
     def stop(self):
         self.running = False
 
-# import system arguments if this is the entry point of the game
-if __name__ == "__main__":
-    import sys
-    system_args = sys.argv
+    def handle_sys_args(self, args):
+        args.pop(0) # remove the entry filename from args list
+
+        for prev, arg, next in util.neighbors(args):
+            #print(prev, arg, next)
+            if arg == '-width' or arg == '-w':
+                try: next = int(next)
+                except Exception: continue
+                else: self.width = next
+
+            elif arg == '-height' or arg == '-h':
+                try: next = int(next)
+                except Exception: continue
+                else: self.height = next
+
+            # avoid using this, no way to exit fullscreen without closing
+            # application also effects macOS other fullscreen applications
+            # TODO: fully implement display control, possible display class
+            elif arg == '-fullscreen':
+                self.display_flags = self.display_flags | pygame.FULLSCREEN
 
 game = Game()
 game.start()
