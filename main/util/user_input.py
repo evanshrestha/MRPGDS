@@ -1,14 +1,14 @@
 # user_input
 # created 7/25/2018
 
+import pygame
+
 # TODO should this be a class????
 
 
 action_map = None # user control mappings
 keys = [] # list of keys (index = keycode)
 mods = None # bitmask of modifiers
-game_lib = None # pygame lib
-
 
 # potential state system
 '''
@@ -31,9 +31,7 @@ idk something logical/efficent/readable
 
 '''
 
-def init(pygame_lib, args):
-    global game_lib
-    game_lib = pygame_lib
+def init(args): pass
     # if not args:
     #     action_map = {
     #         'move_up'   : K_w,
@@ -46,15 +44,15 @@ def init(pygame_lib, args):
 def poll():
     # TODO could use dictionary as switch???
     # handle all user input events
-    for event in game_lib.event.get():
+    for event in pygame.event.get():
 
         event_data = event.__dict__
         #print(event_data)
 
-        if event.type == game_lib.QUIT:
+        if event.type == pygame.QUIT:
             exit()
-        elif event.type == game_lib.KEYDOWN: pass
-        elif event.type == game_lib.KEYUP: pass
-        elif event.type == game_lib.MOUSEBUTTONDOWN: pass
-        elif event.type == game_lib.MOUSEBUTTONUP: pass
-        elif event.type == game_lib.MOUSEMOTION: pass
+        elif event.type == pygame.KEYDOWN: pass
+        elif event.type == pygame.KEYUP: pass
+        elif event.type == pygame.MOUSEBUTTONDOWN: pass
+        elif event.type == pygame.MOUSEBUTTONUP: pass
+        elif event.type == pygame.MOUSEMOTION: pass

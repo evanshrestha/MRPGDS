@@ -21,10 +21,12 @@ class Game(object):
     display_flags = 0
 
     #global variables
-    clock = None
-    width = 800
     height = 600
+    width = 800
     display = None
+    screen = None
+
+    clock = None
     tickrate = 20 #not-used
     framerate = 60 # 0 = unlimited
     running = False
@@ -38,9 +40,9 @@ class Game(object):
         if __name__ == "__main__": self.handle_sys_args(sys.argv)
 
         self.display = pygame.display.set_mode((self.width, self.height), self.display_flags)
-        screen = Screen(self.width, self.height)
+        self.screen = Screen(self.display)
 
-        user_input.init(pygame, None)
+        user_input.init(None)
 
     def update(self, delta):
         # entry point for all loop logic
@@ -50,6 +52,7 @@ class Game(object):
     def render(self):
         # entry point for all graphics
         self.display.fill((0,0,0))
+
         pygame.display.flip()
 
     def run(self):
@@ -70,6 +73,7 @@ class Game(object):
 
     def handle_sys_args(self, args):
         args.pop(0) # remove the entry filename from args list
+        if len(args) < 1: return
 
         for prev, arg, next in util.neighbors(args):
             #print(prev, arg, next)
