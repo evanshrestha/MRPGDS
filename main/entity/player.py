@@ -1,5 +1,6 @@
 from entity.entity import Entity
 import util.user_input as user_input
+import util.asset_manager as asset_manager
 import pygame
 
 # the structure of this is mostly temporary - not sure how much you want to keep
@@ -11,11 +12,11 @@ class Player(Entity):
 
         # will be handled by some type of asset manager later,
         # images will probably some type of imagemap? (forgot the name of it)
-        self.still_image = pygame.image.load("../res/player_still.png")
-        self.right_image = pygame.image.load("../res/player_right.png")
-        self.left_image = pygame.image.load("../res/player_left.png")
-        self.down_image = pygame.image.load("../res/player_down.png")
-        self.up_image = pygame.image.load("../res/player_up.png")
+        self.still_image = asset_manager.load_image("player_still.png")
+        self.right_image = asset_manager.load_image("player_right.png")
+        self.left_image = asset_manager.load_image("player_left.png")
+        self.down_image = asset_manager.load_image("player_down.png")
+        self.up_image = asset_manager.load_image("player_up.png")
 
         self.curr_image = self.still_image
 
