@@ -44,6 +44,12 @@ class Game(object):
         self.display = pygame.display.set_mode((self.width, self.height), self.display_flags)
         self.screen = Screen(self.display)
 
+        # dan's icon
+        icon = pygame.image.load('../res/heart favicon 256.png')
+        pygame.display.set_icon(icon)
+
+        pygame.display.set_caption("MRPGDS")
+
         user_input.init(None)
 
         self.player = Player((50, 50), (50, 50), self.screen)
