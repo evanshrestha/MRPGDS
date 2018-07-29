@@ -9,7 +9,8 @@ import pygame
 action_map = {'left': pygame.K_a,
         'right': pygame.K_d,
         'up': pygame.K_w,
-        'down': pygame.K_s } # user control mappings
+        'down': pygame.K_s,
+        'sprint': pygame.K_LSHIFT } # user control mappings
 
 keys = {}
 
