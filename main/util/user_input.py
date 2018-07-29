@@ -6,8 +6,13 @@ import pygame
 # TODO should this be a class????
 
 
-action_map = None # user control mappings
-keys = [] # list of keys (index = keycode)
+action_map = {'left': pygame.K_a,
+        'right': pygame.K_d,
+        'up': pygame.K_w,
+        'down': pygame.K_s } # user control mappings
+
+keys = {}
+
 mods = None # bitmask of modifiers
 
 # potential state system
@@ -31,7 +36,9 @@ idk something logical/efficent/readable
 
 '''
 
-def init(args): pass
+def init(args):
+    for k in action_map:
+        keys[k] = False
     # if not args:
     #     action_map = {
     #         'move_up'   : K_w,
@@ -45,7 +52,6 @@ def poll():
     # TODO could use dictionary as switch???
     # handle all user input events
     for event in pygame.event.get():
-
         event_data = event.__dict__
         #print(event_data)
 
@@ -56,3 +62,6 @@ def poll():
         elif event.type == pygame.MOUSEBUTTONDOWN: pass
         elif event.type == pygame.MOUSEBUTTONUP: pass
         elif event.type == pygame.MOUSEMOTION: pass
+
+    for k in keys:
+        keys[k] = pygame.key.get_pressed()[action_map[k]]
