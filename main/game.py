@@ -52,13 +52,14 @@ class Game(object):
 
         user_input.init(None)
 
+        # test player
         self.player = Player((50, 50), (50, 50), self.screen)
 
     def update(self, delta):
         # entry point for all loop logic
         # print(delta)
         user_input.poll()
-        self.player.update()
+        self.player.update(delta)
 
     def render(self):
         # entry point for all graphics

@@ -15,5 +15,5 @@ class Entity():
     def render(self):
         pass
 
-    def update(self):
+    def update(self, delta):
         pass
