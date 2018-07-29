@@ -11,6 +11,8 @@ import pygame
 from util import user_input
 from util import util
 from graphics.screen import Screen
+from entity.entity import Entity
+from entity.player import Player
 
 class Game(object):
 
@@ -44,15 +46,18 @@ class Game(object):
 
         user_input.init(None)
 
+        self.player = Player((50, 50), (50, 50), self.screen)
+
     def update(self, delta):
         # entry point for all loop logic
         # print(delta)
         user_input.poll()
+        self.player.update()
 
     def render(self):
         # entry point for all graphics
         self.display.fill((0,0,0))
-
+        self.player.render()
         pygame.display.flip()
 
     def run(self):
