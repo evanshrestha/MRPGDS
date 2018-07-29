@@ -4,6 +4,7 @@ not sure how much you wanna abstract here
 or how you wanna do this so change it
 '''
 
+# do we want to inherit from pygame's Sprite?
 class Entity():
 
 # probably should change this to whatever you wanna abstract

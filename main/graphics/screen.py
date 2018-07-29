@@ -29,9 +29,11 @@ class Screen(object):
         self.width, self.height = surf.get_size()
 
     # TODO
-    def render_sprite(self, sprite):
-        self.surface.blit(sprite.get_surface())
-
+    # not sure if this is how we want this to be done
+    # since right now we aren't actually using pygame's sprites (can change),
+    # I'm changing this to just render an image
+    def render_image(self, x, y, width, height, img):
+        self.surface.blit(pygame.transform.scale(img, (width, height)), (x, y))
 
     def render_rect(self, x, y, width, height, color):
         rect_surf = pygame.Surface((width, height))

@@ -64,7 +64,15 @@ class Game(object):
     def render(self):
         # entry point for all graphics
         self.display.fill((0,0,0))
+
+        # render game here
         self.player.render()
+
+        # temporary FPS counter - checking because of the retina screen problem
+        fps = pygame.font.Font(None, 30).render(str(int(self.clock.get_fps())), True, (255, 255, 255))
+        self.display.blit(fps, (10, 10))
+
+        # update screen
         pygame.display.flip()
 
     def run(self):
