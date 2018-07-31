@@ -26,25 +26,26 @@ class Player(Entity):
 
     def update(self, delta):
 
-        if user_input.keys['sprint']:
+        if user_input.action_map['sprint'].active():
             self.speed_mult = 3
         else:
             self.speed_mult = 1
 
 
         self.curr_image = self.still_image
-        if user_input.keys['up']:
+        if user_input.action_map['up'].active():
             self.move(0, -(self.speed * self.speed_mult * delta / 20))
             self.curr_image = self.up_image
-        if user_input.keys['down']:
+        if user_input.action_map['down'].active():
             self.move(0, (self.speed * self.speed_mult * delta / 20))
             self.curr_image = self.down_image
-        if user_input.keys['left']:
+        if user_input.action_map['left'].active():
             self.move(-(self.speed * self.speed_mult * delta / 20), 0)
             self.curr_image = self.left_image
-        if user_input.keys['right']:
+        if user_input.action_map['right'].active():
             self.move((self.speed * self.speed_mult * delta / 20), 0)
             self.curr_image = self.right_image
+
 
     def move(self, dx, dy):
         self.pos = (self.pos[0] + dx, self.pos[1] + dy)

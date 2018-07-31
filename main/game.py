@@ -45,7 +45,7 @@ class Game(object):
         self.screen = Screen(self.display)
 
         # dan's icon
-        #icon = pygame.image.load('../res/heart favicon 256.png')
+        # icon = asset_manager.load_image()
         #pygame.display.set_icon(icon)
 
         pygame.display.set_caption("MRPGDS")
@@ -53,20 +53,20 @@ class Game(object):
         user_input.init(None)
 
         # test player
-        #self.player = Player((50, 50), (50, 50), self.screen)
+        self.player = Player((50, 50), (50, 50), self.screen)
 
     def update(self, delta):
         # entry point for all loop logic
         # print(delta)
         user_input.poll()
-        #self.player.update(delta)
+        self.player.update(delta)
 
     def render(self):
         # entry point for all graphics
         self.display.fill((0,0,0))
 
         # render game here
-        #self.player.render()
+        self.player.render()
 
         # temporary FPS counter - checking because of the retina screen problem
         fps = pygame.font.Font(None, 30).render(str(int(self.clock.get_fps())), True, (255, 255, 255))
