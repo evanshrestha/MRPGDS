@@ -10,6 +10,7 @@ import sys
 import pygame
 from util import user_input
 from util import util
+from util import asset_manager
 from graphics.screen import Screen
 from entity.entity import Entity
 from entity.player import Player
@@ -45,8 +46,8 @@ class Game(object):
         self.screen = Screen(self.display)
 
         # dan's icon
-        # icon = asset_manager.load_image()
-        #pygame.display.set_icon(icon)
+        icon = asset_manager.load_image("heart favicon 256.png")
+        pygame.display.set_icon(icon)
 
         pygame.display.set_caption("MRPGDS")
 
