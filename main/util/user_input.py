@@ -6,48 +6,20 @@ import pygame
 # TODO should this be a class????
 
 
-action_map = {'left': pygame.K_a,
-        'right': pygame.K_d,
-        'up': pygame.K_w,
-        'down': pygame.K_s,
-        'sprint': pygame.K_LSHIFT } # user control mappings
 
-keys = {}
+action_map = {
+    'left': pygame.K_a,
+    'right': pygame.K_d,
+    'up': pygame.K_w,
+    'down': pygame.K_s,
+    'sprint': pygame.K_LSHIFT
+} # user control mappings
 
-mods = None # bitmask of modifiers
-
-# potential state system
-'''
-we could use the action_map to define which keys
-will trigger a user event, and we could use
-the user events to do things like open menus
-move the character, etc
-
-or
-
-( im leaning towards this way )
-create a list of keys (key being an object that
-stores the key data such as keycode, state, etc)
-and assign keys to the action_map and pass the
-action_map to the player class
-
-or
-
-idk something logical/efficent/readable
-
-'''
+active_keys = []
 
 def init(args):
     for k in action_map:
         keys[k] = False
-    # if not args:
-    #     action_map = {
-    #         'move_up'   : K_w,
-    #         'move_down' : K_s,
-    #         'move_left' : K_a,
-    #         'move_right': K_d,
-    #         'jump'      : K_SPACE
-    #     }
 
 def poll():
     # TODO could use dictionary as switch???
@@ -58,11 +30,35 @@ def poll():
 
         if event.type == pygame.QUIT:
             exit()
-        elif event.type == pygame.KEYDOWN: pass
+        elif event.type == pygame.KEYDOWN:
+
         elif event.type == pygame.KEYUP: pass
+
         elif event.type == pygame.MOUSEBUTTONDOWN: pass
         elif event.type == pygame.MOUSEBUTTONUP: pass
         elif event.type == pygame.MOUSEMOTION: pass
 
-    for k in keys:
-        keys[k] = pygame.key.get_pressed()[action_map[k]]
+
+class Key(object):
+    """docstring for Key."""
+
+    code = None
+    is_active = False
+    was_active = False
+
+    def __init__(self, keycode):
+        self.code = keycode
+
+    def new_state(self, nstate):
+        self.was_active = self.is_active
+        self.is_active = nstate
+
+    def active(self):
+        return self.is_active
+
+    # just these terribly written function
+    def released(self):
+        return (not self.is_active) and self.was_active
+
+    def pressed(self):
+        return self.is_active and (not self.was_active)

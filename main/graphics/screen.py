@@ -35,6 +35,8 @@ class Screen(object):
     def render_image(self, x, y, width, height, img):
         self.surface.blit(pygame.transform.scale(img, (width, height)), (x, y))
 
+    def render_sprite(self, sprite): pass
+
     def render_rect(self, x, y, width, height, color):
         rect_surf = pygame.Surface((width, height))
         rect_surf.fill(color)
