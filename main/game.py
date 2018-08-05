@@ -11,6 +11,7 @@ import pygame
 from util import user_input
 from util import util
 from util import asset_manager
+from level.level import Level
 from graphics.screen import Screen
 from entity.entity import Entity
 from entity.player import Player
@@ -28,6 +29,7 @@ class Game(object):
     width = 800
     display = None
     screen = None
+    level = None
 
     clock = None
     tickrate = 20 #not-used
@@ -35,7 +37,7 @@ class Game(object):
     running = False
 
     def __init__(self):
-        #contructor
+        # contructor
         pygame.init()
         self.clock = pygame.time.Clock()
 
@@ -52,6 +54,7 @@ class Game(object):
         pygame.display.set_caption("MRPGDS")
 
         user_input.init(None)
+        level = Level(32, 32)
 
         # test player
         self.player = Player((50, 50), (50, 50), self.screen)
