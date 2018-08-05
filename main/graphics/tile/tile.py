@@ -1,6 +1,8 @@
 # tile.py
 # created 8/3/2018
 
+import random
+
 class Tile(object):
     """docstring for Tile."""
 
@@ -10,10 +12,10 @@ class Tile(object):
 
     def __init__(self):
         # constructor
-        self.color = Color( random.randint(0, 256),
+        self.color = ( random.randint(0, 256),
                             random.randint(0, 256),
                             random.randint(0, 256))
-        self.size = TILE_SIZE_32()
+        self.size = self.TILE_SIZE_32()
 
     def get_color(self):
         return self.color

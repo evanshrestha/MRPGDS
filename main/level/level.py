@@ -8,17 +8,17 @@ class Level(object):
     # global variables
     width = None
     height = None
-    tiles = None
+    tiles = []
 
     def __init__(self, width, height):
         # constructor
         self.width = width
         self.height = height
-        generate()
+        self.generate()
 
     def generate(self):
         for n in range(self.width * self.height):
-            tiles.append(Tile())
+            self.tiles.append(Tile())
 
     def render(self):
         pass
