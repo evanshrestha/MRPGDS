@@ -18,3 +18,15 @@ class Entity():
 
     def update(self, delta):
         pass
+
+    def x(self):
+        return self.pos[0]
+
+    def y(self):
+        return self.pos[1]
+
+    def width(self):
+        return self.size[0]
+
+    def height(self):
+        return self.size[1]

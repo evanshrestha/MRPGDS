@@ -17,8 +17,13 @@ class Tile(object):
                             random.randint(0, 256))
         self.size = self.TILE_SIZE_32()
 
+    def render(self, x, y, screen):
+        screen.render_rect(x, y, self.size, self.size, self.color)
+
     def get_color(self):
         return self.color
 
     def TILE_SIZE_32(self):
         return 32
+
+    # TODO get_bitshift function

@@ -41,3 +41,9 @@ class Screen(object):
         rect_surf = pygame.Surface((width, height))
         rect_surf.fill(color)
         self.surface.blit(rect_surf, (x, y))
+
+    def width(self):
+        return self.width
+
+    def height(self):
+        return self.height

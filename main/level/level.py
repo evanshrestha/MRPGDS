@@ -20,8 +20,15 @@ class Level(object):
         for n in range(self.width * self.height):
             self.tiles.append(Tile())
 
-    def render(self):
-        pass
+    def render(self, camera, screen):
+        xs = camera.levelOffsetX() >> 4;
+		xe = camera.levelOffsetX() + screen.width() >> 4;
+		ys = camera.levelOffsetY() >> 4;
+		ye = camera.levelOffsetY() + screen.height() >> 4;
+        for y in range(ys,ye):
+            for x in range(xs,xe):
+                get_tile(x, y).render(x << 4, y << 4, screen)
+
 
     def update(self):
         pass

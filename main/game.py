@@ -15,6 +15,7 @@ from level.level import Level
 from graphics.screen import Screen
 from entity.entity import Entity
 from entity.player import Player
+from graphics.camera import Camera
 
 class Game(object):
 
@@ -30,6 +31,7 @@ class Game(object):
     display = None
     screen = None
     level = None
+    camera = None
 
     clock = None
     tickrate = 20 #not-used
@@ -59,11 +61,15 @@ class Game(object):
         # test player
         self.player = Player((50, 50), (50, 50), self.screen)
 
+        # camera
+        self.camera = Camera()
+
     def update(self, delta):
         # entry point for all loop logic
         # print(delta)
         user_input.poll()
         self.player.update(delta)
+        self.camera.update(self.player, self.level, self.screen)
 
     def render(self):
         # entry point for all graphics

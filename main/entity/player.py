@@ -48,4 +48,4 @@ class Player(Entity):
 
 
     def move(self, dx, dy):
-        self.pos = (self.pos[0] + dx, self.pos[1] + dy)
+        self.pos = (self.pos[0] + dx, self.pos[1] + dy) # kys
