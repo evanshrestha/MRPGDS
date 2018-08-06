@@ -1,7 +1,7 @@
 # point.py
 # created 8/5/2018
 
-class point(object):
+class Point(object):
     """docstring for point."""
 
     #global variables
