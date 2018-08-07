@@ -17,7 +17,7 @@ class Camera(object):
         player_position = Point()
         player_offset = Point()
 
-    def update(self, player, level, screen):
+    def update(self, player, level, screen):        
         self.level_offset.x( player.x() - (screen.get_width() - player.width()) / 2 - self.player_offset.x() )
         self.level_offset.y( player.y() - (screen.get_height() - player.height()) / 2 - self.player_offset.y() )
         self.player_position.x( (screen.get_width() - player.width()) / 2 + self.player_offset.x() )

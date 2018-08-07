@@ -15,10 +15,10 @@ class Point(object):
 
     def x(self, *args):
         if args:
-            self.xp += args[0]
+            self.xp = args[0]
         return self.xp
 
     def y(self, *args):
         if args:
-            self.yp += args[0]
+            self.yp = args[0]
         return self.yp

@@ -19,22 +19,29 @@ class Level(object):
         self.generate()
 
     def generate(self):
-        for n in range(self.width * self.height):
-            self.tiles.append(Tile((
-                                random.randint(0, 255),
-                                random.randint(0, 255),
-                                random.randint(0, 255))))
+        n = 0
+        for i in range(self.width * self.height):
+            self.tiles.append(Tile((n,100,200)))
+            n+=1
+            print(n)
+            if n>255:
+                n=0
+            #self.tiles.append(Tile((
+                                #random.randint(0, 255),
+                                #random.randint(0, 255),
+                                #random.randint(0, 255))))
 
     def render(self, camera, screen):
-        xs = int(camera.level_offset.x()) >> 4
-        xe = int(camera.level_offset.x() + screen.get_width()) >> 4
-        ys = int(camera.level_offset.y()) >> 4
-        ye = int(camera.level_offset.y() + screen.get_height()) >> 4
+        xs = int(camera.level_offset.x()) >> 5
+        xe = int(camera.level_offset.x() + screen.get_width()+ 32) >> 5
+        ys = int(camera.level_offset.y()) >> 5
+        ye = int(camera.level_offset.y() + screen.get_height()+ 32) >> 5
         for y in range(ys, ye):
             for x in range(xs, xe):
                 if x < 0 or y < 0 or x > self.width or y > self.height:
                     continue
-                self.get_tile(x, y).render(x << 4, y << 4, screen)
+                self.get_tile(x, y).render(x << 5, y << 5, screen)
+                print(x,y)
 
 
     def update(self):

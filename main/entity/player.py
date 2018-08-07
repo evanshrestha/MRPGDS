@@ -20,9 +20,9 @@ class Player(Entity):
 
         self.curr_image = self.still_image
 
-    def render(self, screen):
+    def render(self, camera, screen):
         # just a test - will probably change this to a surface instead of a white rectangle
-        screen.render_image(self.pos[0], self.pos[1], self.size[0], self.size[1], self.curr_image)
+        screen.render_image(camera.player_position.x(), camera.player_position.y(), self.size[0], self.size[1], self.curr_image)
 
     def update(self, delta):
 

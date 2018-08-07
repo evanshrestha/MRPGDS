@@ -77,7 +77,7 @@ class Game(object):
 
         # render game here
         self.level.render(self.camera, self.screen)
-        self.player.render(self.screen)
+        self.player.render(self.camera, self.screen)
 
         # temporary FPS counter - checking because of the retina screen problem
         fps = pygame.font.Font(None, 30).render(str(int(self.clock.get_fps())), True, (255, 255, 255))
