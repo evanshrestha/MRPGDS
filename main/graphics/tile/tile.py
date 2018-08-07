@@ -10,11 +10,9 @@ class Tile(object):
     color = None
     size = None
 
-    def __init__(self):
+    def __init__(self, color = (0,0,0)):
         # constructor
-        self.color = ( random.randint(0, 256),
-                            random.randint(0, 256),
-                            random.randint(0, 256))
+        self.color = color
         self.size = self.TILE_SIZE_32()
 
     def render(self, x, y, screen):
@@ -27,3 +25,5 @@ class Tile(object):
         return 32
 
     # TODO get_bitshift function
+
+VOID_TILE = Tile()

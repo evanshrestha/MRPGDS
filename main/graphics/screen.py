@@ -42,8 +42,8 @@ class Screen(object):
         rect_surf.fill(color)
         self.surface.blit(rect_surf, (x, y))
 
-    def width(self):
+    def get_width(self):
         return self.width
 
-    def height(self):
+    def get_height(self):
         return self.height

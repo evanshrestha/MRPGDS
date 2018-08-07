@@ -5,8 +5,8 @@ import pygame
 
 # the structure of this is mostly temporary - not sure how much you want to keep
 class Player(Entity):
-    def __init__(self, pos = (0, 0), size = (0, 0), screen = None):
-        super().__init__(pos, size, screen)
+    def __init__(self, pos = (0, 0), size = (0, 0)):
+        super().__init__(pos, size)
         self.speed = 2
         self.speed_mult = 1
 
@@ -20,9 +20,9 @@ class Player(Entity):
 
         self.curr_image = self.still_image
 
-    def render(self):
+    def render(self, screen):
         # just a test - will probably change this to a surface instead of a white rectangle
-        self.screen.render_image(self.pos[0], self.pos[1], self.size[0], self.size[1], self.curr_image)
+        screen.render_image(self.pos[0], self.pos[1], self.size[0], self.size[1], self.curr_image)
 
     def update(self, delta):
 

@@ -56,10 +56,10 @@ class Game(object):
         pygame.display.set_caption("MRPGDS")
 
         user_input.init(None)
-        level = Level(32, 32)
+        self.level = Level(32, 32)
 
         # test player
-        self.player = Player((50, 50), (50, 50), self.screen)
+        self.player = Player((50, 50), (50, 50))
 
         # camera
         self.camera = Camera()
@@ -76,7 +76,8 @@ class Game(object):
         self.display.fill((0,0,0))
 
         # render game here
-        self.player.render()
+        self.level.render(self.camera, self.screen)
+        self.player.render(self.screen)
 
         # temporary FPS counter - checking because of the retina screen problem
         fps = pygame.font.Font(None, 30).render(str(int(self.clock.get_fps())), True, (255, 255, 255))
