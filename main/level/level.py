@@ -32,16 +32,18 @@ class Level(object):
                                 #random.randint(0, 255))))
 
     def render(self, camera, screen):
-        xs = int(camera.level_offset.x()) >> 5
-        xe = int(camera.level_offset.x() + screen.get_width()+ 32) >> 5
-        ys = int(camera.level_offset.y()) >> 5
-        ye = int(camera.level_offset.y() + screen.get_height()+ 32) >> 5
+        xs = 0
+        xe = int((screen.get_width()+ 32) / 32)
+        ys = 0
+        ye = int((screen.get_height()+ 32) / 32)
+
+        print(camera.level_offset.x(), camera.level_offset.y())
+
         for y in range(ys, ye):
             for x in range(xs, xe):
                 if x < 0 or y < 0 or x > self.width or y > self.height:
                     continue
-                self.get_tile(x, y).render(x << 5, y << 5, screen)
-                print(x,y)
+                self.get_tile(x, y).render(camera.level_offset.x() + x * 32, camera.level_offset.y() + y * 32, screen)
 
 
     def update(self):
