@@ -4,6 +4,7 @@
 import random
 from graphics.tile.tile import Tile
 from graphics.tile.tile import VOID_TILE
+import math
 
 class Level(object):
     """docstring for Level."""
@@ -33,9 +34,9 @@ class Level(object):
 
     def render(self, camera, screen):
         xs = 0
-        xe = int((screen.get_width()+ 32) / 32)
+        xe = int((screen.get_width() + 32) / 32)
         ys = 0
-        ye = int((screen.get_height()+ 32) / 32)
+        ye = int((screen.get_height() + 32) / 32)
 
         print(camera.level_offset.x(), camera.level_offset.y())
 
@@ -43,7 +44,7 @@ class Level(object):
             for x in range(xs, xe):
                 if x < 0 or y < 0 or x > self.width or y > self.height:
                     continue
-                self.get_tile(x, y).render(camera.level_offset.x() + x * 32, camera.level_offset.y() + y * 32, screen)
+                self.get_tile(x, y).render(round(camera.level_offset.x()) + (x * 32), round(camera.level_offset.y()) + (y * 32), screen)
 
 
     def update(self):
