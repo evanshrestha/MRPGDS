@@ -71,10 +71,12 @@ def poll():
         if event.type == pygame.QUIT:
             exit()
         elif event.type == pygame.KEYDOWN:
-            action_map[keys[event.key]].new_state(True)
-            active_keys.append(event.key)
+            if event.key in keys:
+                action_map[keys[event.key]].new_state(True)
+                active_keys.append(event.key)
         elif event.type == pygame.KEYUP:
-            action_map[keys[event.key]].new_state(False)
+            if event.key in keys:
+                action_map[keys[event.key]].new_state(False)
         elif event.type == pygame.MOUSEBUTTONDOWN: pass
         elif event.type == pygame.MOUSEBUTTONUP: pass
         elif event.type == pygame.MOUSEMOTION: pass
