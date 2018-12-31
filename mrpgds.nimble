@@ -1,7 +1,7 @@
 # Package
 
 version       = "0.1.0"
-author        = "Jordan Bailey"
+author        = ""
 description   = "Multiplayer RPG Dating Sim"
 license       = "GPL-3.0-only"
 srcDir        = "src"
