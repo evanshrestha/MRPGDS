@@ -1,10 +1,11 @@
 #[
-  TODO: copyright claim, license if needed
-  Created: Dec 31, 2018 [12:31]
+    TODO: copyright claim, license if needed
+    Created: Dec 31, 2018 [12:31]
 
-  Purpose: main entry point of game
+    Purpose: main entry point of game
 ]#
 
+import util/timing
 import sdl2
 
 # TODO: logging macro
@@ -13,70 +14,80 @@ import sdl2
 
 #GLOBAL FIELDS
 var 
-  running: bool
-  title: string = "MRPGDS"
-  width: int = 800
-  height: int = 600
-  window: WindowPtr
-  event: Event = sdl2.defaultEvent
+    running: bool
+    title: string = "MRPGDS"
+    width: int = 800
+    height: int = 600
+    window: WindowPtr
+    event: Event = sdl2.defaultEvent
+    framerate: Rate = rate(120)
+    tickrate: Rate = rate(40)
 
-#FUTURE DECL
+#FUNC DECL
 proc start()
 proc stop()
 
 proc init()
 proc terminate()
 
-# TODO: 
-  # do we want to handle the timing of these functions
-  # internally or in the main loop
-  # internally sounds nice tbh, clean main loop and all
-proc render()
-proc update()
+proc render(delta: float)
+proc update(delta: float)
 
 #PROGRAM
 when isMainModule:  
-  init()
+    init()
 
-  start()
-  while running:
-    # TODO:
-    # create event handler
-    #   - global event state
-    #   - handles sdl2.pollevent
-    while sdl2.pollEvent(event):
-      if event.kind == sdl2.QuitEvent: stop()
+    start()
+    
+    var last = time()
+    while running:
+        # TODO:
+        # create event handler
+        #   - global event state
+        #   - handles sdl2.pollevent
+        while sdl2.pollEvent(event):
+            if event.kind == sdl2.QuitEvent: stop()
+        
+        # NOTE: do we like this???
+        framerate.limit(render)
+        tickrate.limit(update)
 
-    render()
-    update()
+        if time() - last > 1:
+            echo framerate.count, " fps"
+            echo tickrate.count, " ticks"
+            framerate.count = 0
+            tickrate.count = 0
+            last = time()
 
-  terminate()
+    terminate()
 
-#PROC IMPL
-proc render() =
-  discard
+#FUNC IMPL
+proc render(delta: float) =
+    # delta probably wont be used
+    discard
 
-proc update() =
-  discard
+proc update(delta: float) =
+    # update here
+    discard
 
 proc init() =
-  sdl2.init(INIT_EVERYTHING)
-  window = 
-    sdl2.createWindow(
-      title.cstring,
-      SDL_WINDOWPOS_CENTERED,
-      SDL_WINDOWPOS_CENTERED, 
-      width.cint, 
-      height.cint,
-      SDL_WINDOW_RESIZABLE)
+    sdl2.init(INIT_EVERYTHING)
+    window = 
+        sdl2.createWindow(
+        title.cstring,
+        SDL_WINDOWPOS_CENTERED,
+        SDL_WINDOWPOS_CENTERED, 
+        width.cint, 
+        height.cint,
+        SDL_WINDOW_RESIZABLE)
 
 proc terminate() =
-  destroy window
+    destroy window
 
-  sdl2.quit()
+    sdl2.quit()
 
 proc start() =
-  running = true
+    running = true
 
 proc stop() = 
-  running = false
+    running = false
