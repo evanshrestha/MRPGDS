@@ -4,11 +4,13 @@
     Purpose: handle user input and input bindings
 ]#
 
-import tables
+import tables, marshal, streams, os, ospaths, math
 
 import sdl2
 
-import eventhandler
+import eventhandler, filesys
+
+#TODO: scroll wheel support
 
 #TYPE DECL
 type
@@ -53,6 +55,7 @@ var prev_inputstates: Table[int, State]
 #FUNC DECL
 proc init*(binding: Table[Action, int] = ESDF_BINDINGS)
 proc serialize*()
+proc deserialize()
 
 proc update*()
 proc state*(action: Action): State
@@ -67,13 +70,25 @@ proc genInputStates*()
 #FUNC IMPL
 proc init*(binding: Table[Action, int]) =
     #TODO: get serialized bind data
-    binds = binding
+    deserialize()
     genInputStates()
 
 
 #TODO: serialize binds
 proc serialize*() =
-    return
+    let stream = openFileStream(bindingsPath, fmWrite)
+    stream.store(binds)
+    close stream
+
+proc deserialize() =
+    if fileExists bindingsPath:
+        let stream = openFileStream(bindingsPath, fmRead)
+        stream.load(binds)
+        close stream
+    else:
+        binds = WASD_BINDINGS
+        serialize()
+
 
 proc update*() =
     prev_inputstates = inputstates
@@ -117,9 +132,10 @@ proc released*(action: Action): bool =
 
 proc changeBind*(action: Action, key: cint) = 
     binds[action] = key
+    serialize() # NOTE: serialize every bind change vs. when user is done
 
 proc genInputStates*() =
-    inputstates = initTable[int, State](32)
+    inputstates = initTable[int, State](WASD_BINDINGS.len.nextPowerOfTwo)
     for action, key in binds:
         inputstates.add(key, INACTIVE)
 

@@ -8,6 +8,7 @@
 import util/timing
 import util/eventhandler
 import util/input
+import util/filesys
 
 import sdl2
 
@@ -44,10 +45,6 @@ when isMainModule:
     
     var last = time()
     while running:
-        # TODO:
-        # create event handler
-        #   - global event state
-        #   - handles sdl2.pollevent
         while sdl2.pollEvent(event):
             if event.kind == sdl2.QuitEvent: stop()
             else: event.handle()
@@ -72,7 +69,13 @@ proc render(delta: float) =
 
 proc update(delta: float) =
     input.update()
-    if DOWN.released: echo "move down"
+
+    if UP.active: echo "UP"
+    if DOWN.active: echo "DOWN"
+    if LEFT.active: echo "LEFT"
+    if RIGHT.active: echo "RIGHT"
+    if ATTACK1.active: echo "ATTACK1"
+    if ATTACK2.active: echo "ATTACK2"
 
 proc init() =
     sdl2.init(INIT_EVERYTHING)
@@ -85,11 +88,12 @@ proc init() =
         height.cint,
         SDL_WINDOW_RESIZABLE)
 
+    filesys.init()
     input.init()
 
 proc terminate() =
     destroy window
-
+    
     sdl2.quit()
 
 proc start() =
