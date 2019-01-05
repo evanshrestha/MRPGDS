@@ -78,17 +78,20 @@ proc serialize*() =
 proc update*() =
     prev_inputstates = inputstates
 
-    #FATAL: handle input that's not in the input state table
     for event in eventhandler.input_q:
         case event.kind:
             of KeyDown:
-                inputstates[event.key.keysym.sym] = PRESSED
+                if inputstates.hasKey(event.key.keysym.sym):
+                    inputstates[event.key.keysym.sym] = PRESSED
             of KeyUp:
-                inputstates[event.key.keysym.sym] = RELEASED
+                if inputstates.hasKey(event.key.keysym.sym):
+                    inputstates[event.key.keysym.sym] = RELEASED
             of MouseButtonDown:
-                inputstates[int event.button.button] = PRESSED
+                if inputstates.hasKey(int event.button.button):
+                    inputstates[int event.button.button] = PRESSED
             of MouseButtonUp:
-                inputstates[int event.button.button] = RELEASED
+                if inputstates.hasKey(int event.button.button):
+                    inputstates[int event.button.button] = RELEASED
             else: discard
     input_q = @[]
 
