@@ -6,6 +6,9 @@
 ]#
 
 import util/timing
+import util/eventhandler
+import util/input
+
 import sdl2
 
 # TODO: logging macro
@@ -13,7 +16,7 @@ import sdl2
 #GLOBAL CONSTS
 
 #GLOBAL FIELDS
-var 
+var
     running: bool
     title: string = "MRPGDS"
     width: int = 800
@@ -47,6 +50,7 @@ when isMainModule:
         #   - handles sdl2.pollevent
         while sdl2.pollEvent(event):
             if event.kind == sdl2.QuitEvent: stop()
+            else: event.handle()
         
         # NOTE: do we like this???
         framerate.limit(render)
@@ -67,8 +71,8 @@ proc render(delta: float) =
     discard
 
 proc update(delta: float) =
-    # update here
-    discard
+    input.update()
+    if DOWN.released: echo "move down"
 
 proc init() =
     sdl2.init(INIT_EVERYTHING)
@@ -80,6 +84,8 @@ proc init() =
         width.cint, 
         height.cint,
         SDL_WINDOW_RESIZABLE)
+
+    input.init()
 
 proc terminate() =
     destroy window

@@ -1,6 +1,6 @@
 #[
     TODO: copyright claim, license if needed
-    Created: Jan 1, 2018 [14:43]
+    Created: Jan 1, 2019 [14:43]
     
     Purpose: timing variables group into a tuple
              companied w/ functions to facilate
