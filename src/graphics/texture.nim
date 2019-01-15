@@ -19,32 +19,35 @@ type
 
 #GLOBAL CONSTS
 #FUNC DECL
-proc createTexture*(path: string; renderer: RendererPtr): STexture
+proc loadTexture*(path: string; renderer: RendererPtr): STexture
 #TODO: createTexture from section
 
 #NOTE: is this best way for a defualt texture
-proc loadTextureOrDefault(surf: Surfaceptr, renderer: RendererPtr): TexturePtr
-proc getOrLoadDefaultTexture(renderer: RendererPtr): TexturePtr
+proc createTextureOrGetDefault(surf: Surfaceptr, renderer: RendererPtr): STexture
+proc getOrLoadDefaultTexture(renderer: RendererPtr): STexture
 
 #GLOBAL FIELDS
-var default: TexturePtr;
+var default: STexture;
 
 #FUNC IMPL
-proc createTexture(path: string; renderer: RendererPtr): STexture =
+proc loadTexture(path: string; renderer: RendererPtr): STexture =
     let surf = if path.isAbsolute: loadBMP(path) else: loadBMP(joinPath(getAppDir(), "assets", path))
-    if surf == nil: LOG(ERROR, "failed to find file "&path)
-    result = (loadTextureOrDefault(surf, renderer), surf.w, surf.h)
+    if surf == nil: LOG(ERROR, "failed to find \""&path&"\" using default texture")
+    result = createTextureOrGetDefault(surf, renderer)
 
-proc loadTextureOrDefault(surf: SurfacePtr, renderer: RendererPtr): TexturePtr =
-    result = renderer.createTextureFromSurface(surf)
-    if result == nil: return getOrLoadDefaultTexture(renderer)
+proc createTextureOrGetDefault(surf: SurfacePtr, renderer: RendererPtr): STexture =
+    if surf != nil:
+        result = (renderer.createTextureFromSurface(surf), surf.w, surf.h)
+        if result.texptr == nil: return getOrLoadDefaultTexture(renderer)
+    else:
+        return getOrLoadDefaultTexture(renderer)
 
-proc getOrLoadDefaultTexture(renderer: RendererPtr): TexturePtr =
-    if default == nil:
+proc getOrLoadDefaultTexture(renderer: RendererPtr): STexture =
+    if default.texptr == nil:
         let surf = loadBMP(joinPath(getAppDir(), "assets", "error.bmp"))
         if surf == nil: LOG(FATAL, "could not find default texture file")
-        default = renderer.createTextureFromSurface(surf)
-        if default == nil: LOG(FATAL, "failed to create texture from default texture file")
+        default = (renderer.createTextureFromSurface(surf), surf.w, surf.h)
+        if default.texptr == nil: LOG(FATAL, "failed to create texture from default texture file")
     return default
 
 proc destroy*(tex: STexture) =

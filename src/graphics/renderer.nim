@@ -19,18 +19,18 @@ var surface: SurfacePtr;
 var renderer: RendererPtr;
 
 #FUNC IMPL
-proc render*(tex: TexturePtr; x, y, w, h: cint) =
+proc render*(tex: STexture; x, y, w, h: cint) =
     let r = rect(x, y, w, h)
-    renderer.copy(tex, nil, r.unsafeAddr)
+    renderer.copy(tex.texptr, nil, r.unsafeAddr)
 
-proc render*(tex: TexturePtr; r: Rect) =
-    renderer.copy(tex, nil, r.unsafeAddr)
+proc render*(tex: STexture; r: Rect) =
+    renderer.copy(tex.texptr, nil, r.unsafeAddr)
 
-proc render*(tex: TexturePtr; r: ptr Rect) =
-    renderer.copy(tex, nil, r)
+proc render*(tex: STexture; r: ptr Rect) =
+    renderer.copy(tex.texptr, nil, r)
 
 proc render*(tex: STexture; x, y: int) =
-    render(tex.texptr, x.cint, y.cint, tex.width, tex.height)
+    render(tex, x.cint, y.cint, tex.width, tex.height)
     
 proc init*(window: WindowPtr) =
     surface = window.getSurface
