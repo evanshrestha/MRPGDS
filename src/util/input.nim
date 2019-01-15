@@ -27,7 +27,7 @@ type
         HUD
 
 #GLOBAL CONSTS
-var WASD_BINDINGS: Table[Action, int] = 
+const WASD_BINDINGS*: Table[Action, int] = 
     {
         UP: int K_w, LEFT: int K_a, DOWN: int K_s, RIGHT: int K_d,
         ATTACK1: int BUTTON_LEFT, ATTACK2: int BUTTON_RIGHT,
@@ -37,7 +37,7 @@ var WASD_BINDINGS: Table[Action, int] =
     }.toTable
 
 # NOTE: this is the wave btw
-var ESDF_BINDINGS: Table[Action, int] = 
+const ESDF_BINDINGS*: Table[Action, int] =
     {
         UP: int K_e, LEFT: int K_s, DOWN: int K_d, RIGHT: int K_f,
         ATTACK1: int BUTTON_LEFT, ATTACK2: int BUTTON_RIGHT,
