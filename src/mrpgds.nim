@@ -57,7 +57,7 @@ when isMainModule:
 
     start()
 
-    let tex = createTexture("test.bmp", window.getRenderer)
+    let tex = loadTexture("gemm.bmp", window.getRenderer) # typo for testing 
 
     var last = time()
     while running:
@@ -85,7 +85,7 @@ proc render(delta: float) =
     
     renderer.setClearColor color(255, 0, 255, 255)
 
-    tex.render(100, 100)
+    tex.render(100, 100, 300, 300)
     renderer.present()
 
 proc update(delta: float) =
