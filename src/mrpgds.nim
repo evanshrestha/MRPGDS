@@ -9,7 +9,12 @@ import util/timing
 import util/eventhandler
 import util/input
 import util/filesys
+import util/logger
 
+import graphics/texture
+import graphics/renderer
+
+import ospaths, macros, terminal
 import sdl2
 
 # TODO: logging macro
@@ -24,7 +29,7 @@ var
     height: int = 600
     window: WindowPtr
     event: Event = sdl2.defaultEvent
-    framerate: Rate = rate(120)
+    framerate: Rate = rate(-120)
     tickrate: Rate = rate(40)
 
 #FUNC DECL
@@ -37,12 +42,23 @@ proc terminate()
 proc render(delta: float)
 proc update(delta: float)
 
+
+#[
+    TODO:
+        window wrapper #NOTE: maybe
+        create sprite, w /animations
+        look at organization of renderer render functions
+]#
+
+
 #PROGRAM
-when isMainModule:  
+when isMainModule:
     init()
 
     start()
-    
+
+    let tex = createTexture("test.bmp", window.getRenderer)
+
     var last = time()
     while running:
         while sdl2.pollEvent(event):
@@ -65,7 +81,12 @@ when isMainModule:
 #FUNC IMPL
 proc render(delta: float) =
     # delta probably wont be used
-    discard
+    renderer.clear()
+    
+    renderer.setClearColor color(255, 0, 255, 255)
+
+    tex.render(100, 100)
+    renderer.present()
 
 proc update(delta: float) =
     input.update()
@@ -87,12 +108,19 @@ proc init() =
         width.cint, 
         height.cint,
         SDL_WINDOW_RESIZABLE)
+    LOG(DEBUG, "created sdl2 windowptr")
 
     filesys.init()
-    input.init()
+    input.init(ESDF_BINDINGS)
+    renderer.init(window)
 
 proc terminate() =
-    destroy window
+    tex.destroy()
+    renderer.destroy()
+    window.destroy()
+
+    # this shouldn't be need, but better safe than sorry, right?
+    system.addQuitProc(resetAttributes)
     
     sdl2.quit()
 
