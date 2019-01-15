@@ -1,10 +1,12 @@
 #[
     Created: Jan 5, 2019 [10:33]
 
-    Purpose: file input/output abstraction 
+    Purpose: file input/output abstraction/centralization
 ]#
 
-import os, ospaths
+import logger
+
+import os, ospaths, terminal
 
 #TYPE DECL
 
@@ -28,12 +30,13 @@ let initializing: bool = not existsDir saveDir
 #FUNC IMPL
 proc init*() =
     if initializing: #NOTE: logging system
-        if saveDir == "": echo "filesaving on this os is not yet supported"
+        if saveDir == "": LOG(WARNING, "file saving on this os is not yet supported")
         else: 
             createDir saveDir
     
 proc getUserDataDir*(): string =
     when defined Windows:
+        LOG(DEBUG, "user data directory="&joinPath([getHomeDir(), "appdata", "local", HEAD]))
         return joinPath([getHomeDir(), "appdata", "local", HEAD])
     elif defined Linux:
         return "" #TODO: Linux serialization support
