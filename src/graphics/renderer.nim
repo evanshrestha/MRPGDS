@@ -4,8 +4,6 @@
     Purpose: rendition interface
 ]#
 
-import texture
-
 import sdl2
 
 #TYPE DECL
@@ -19,19 +17,20 @@ var surface: SurfacePtr;
 var renderer: RendererPtr;
 
 #FUNC IMPL
-proc render*(tex: STexture; x, y, w, h: cint) =
+proc render*(tex: TexturePtr; srcrect, distrect: Rect) =
+    renderer.copy(tex, unsafeAddr(srcrect), unsafeAddr(distrect))
+
+#TODO: speed test these render functions
+proc render*(tex: TexturePtr; x, y, w, h: cint) =
     let r = rect(x, y, w, h)
-    renderer.copy(tex.texptr, nil, r.unsafeAddr)
+    renderer.copy(tex, nil, unsafeAddr(r))
 
-proc render*(tex: STexture; r: Rect) =
-    renderer.copy(tex.texptr, nil, r.unsafeAddr)
+proc render*(tex: TexturePtr; r: Rect) =
+    renderer.copy(tex, nil, unsafeAddr(r))
 
-proc render*(tex: STexture; r: ptr Rect) =
-    renderer.copy(tex.texptr, nil, r)
+proc render*(tex: TexturePtr; r: ptr Rect) =
+    renderer.copy(tex, nil, r)
 
-proc render*(tex: STexture; x, y: int) =
-    render(tex, x.cint, y.cint, tex.width, tex.height)
-    
 proc init*(window: WindowPtr) =
     surface = window.getSurface
     renderer = window.createRenderer(-1, Renderer_Accelerated)

@@ -17,8 +17,6 @@ import graphics/renderer
 import ospaths, macros, terminal
 import sdl2
 
-# TODO: logging macro
-
 #GLOBAL CONSTS
 
 #GLOBAL FIELDS
@@ -46,8 +44,11 @@ proc update(delta: float)
 #[
     TODO:
         window wrapper #NOTE: maybe
-        create sprite, w /animations
-        look at organization of renderer render functions
+        sprite, w /animations
+        spritesheets
+        camera
+        stage/leveling
+        world events
 ]#
 
 
@@ -58,6 +59,7 @@ when isMainModule:
     start()
 
     let tex = loadTexture("gemm.bmp", window.getRenderer) # typo for testing 
+    let stex = createSubTexture(tex, rect(0,0,100,100))
 
     var last = time()
     while running:
@@ -85,7 +87,7 @@ proc render(delta: float) =
     
     renderer.setClearColor color(255, 0, 255, 255)
 
-    tex.render(100, 100, 300, 300)
+    stex.render(100, 100)
     renderer.present()
 
 proc update(delta: float) =
