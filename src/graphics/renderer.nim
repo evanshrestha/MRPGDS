@@ -45,6 +45,9 @@ proc setSurface*(surf: SurfacePtr) =
 proc setRenderer*(rend: RendererPtr) =
     renderer = rend
 
+proc getRenderer*(): RendererPtr =
+    return renderer
+    
 proc clear*() = 
     clear renderer
 
