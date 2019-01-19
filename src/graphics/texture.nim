@@ -60,7 +60,7 @@ proc createSubTexture*(texture: WTexture, src: Rect): STexture =
     return (texture, src)
 
 proc createSubTexture*(texture: WTexture, x, y, w, h: cint): STexture = 
-    return (texture, rect(x, y, w, h))    
+    return (texture, rect(x, y, w, h))
 
 proc createTextureOrGetDefault(surf: SurfacePtr, renderer: RendererPtr): WTexture =
     if surf != nil:
