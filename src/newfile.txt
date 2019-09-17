@@ -1,0 +1,16 @@
+#[
+    Created: m d, YYYY [HH:MM]
+
+    Desc: ...
+]#
+
+
+#TYPE DECL
+
+#GLOBAL CONSTS
+
+#GLOBAL VARS
+
+#FUNC DECL
+
+#FUNC IMPL

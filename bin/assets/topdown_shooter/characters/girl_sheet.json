@@ -1,0 +1,51 @@
+{ "frames": [
+   {
+    "filename": "girl_sheet 0.png",
+    "frame": { "x": 0, "y": 0, "w": 20, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 24 },
+    "sourceSize": { "w": 20, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "girl_sheet 1.png",
+    "frame": { "x": 20, "y": 0, "w": 20, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 24 },
+    "sourceSize": { "w": 20, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "girl_sheet 2.png",
+    "frame": { "x": 40, "y": 0, "w": 20, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 24 },
+    "sourceSize": { "w": 20, "h": 24 },
+    "duration": 100
+   },
+   {
+    "filename": "girl_sheet 3.png",
+    "frame": { "x": 60, "y": 0, "w": 20, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 24 },
+    "sourceSize": { "w": 20, "h": 24 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.12.1",
+  "format": "RGBA8888",
+  "size": { "w": 80, "h": 24 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Sprite Sheet", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

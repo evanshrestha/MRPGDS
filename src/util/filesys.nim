@@ -19,6 +19,8 @@ proc init*()
 proc getUserDataDir*(): string
 proc deleteUserData*()
 
+proc toAbsDir*(path: string): string
+
 #GLOBAL FIELDS
 let saveDir = getUserDataDir()
 
@@ -45,5 +47,11 @@ proc getUserDataDir*(): string =
     elif defined MacOSX:
         return "" #TODO: macosx serialization support
 
+
 proc deleteUserData*() =
     removeDir(getUserDataDir())
+
+proc toAbsDir*(path: string): string = 
+    return
+        if path.isAbsolute: path
+        else: joinPath(getAppDir(), path)

@@ -4,7 +4,8 @@
     Purpose: handle system wide events
 ]#
 
-import sdl2
+import 
+    sdl2/sdl
 
 #TYPE DECL
 

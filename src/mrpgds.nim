@@ -5,37 +5,46 @@
     Purpose: main entry point of game
 ]#
 
-import util/timing
-import util/eventhandler
-import util/input
-import util/filesys
-import util/logger
+import os, macros, terminal
+import sdl2/sdl, sdl2/sdl_image, opengl, glm
 
-import graphics/texture
-import graphics/renderer
-
-import ospaths, macros, terminal
-import sdl2
+import 
+    util/timing,
+    util/eventhandler,
+    util/input,
+    util/filesys,
+    util/logger,
+    util/misc,
+    graphics/window,
+    graphics/texture,
+    graphics/renderer,
+    level as mLevel,
+    camera,
+    entity,
+    scene
 
 #GLOBAL CONSTS
 
-#GLOBAL FIELDS
+#GLOBAL VARS
 var
     running: bool
     title: string = "MRPGDS"
     width: int = 800
     height: int = 600
-    window: WindowPtr
-    event: Event = sdl2.defaultEvent
-    framerate: Rate = rate(-120)
-    tickrate: Rate = rate(40)
+    context: GLContext
+    event: Event
+    framerate: Rate = rate(0)
+    tickrate: Rate = rate(60)
+
+var
+    mainScene: Scene
 
 #FUNC DECL
-proc start()
-proc stop()
+proc start() {.inline.} = running = true
+proc stop() {.inline.} = running = false
 
 proc init()
-proc terminate()
+proc fin()
 
 proc render(delta: float)
 proc update(delta: float)
@@ -49,6 +58,7 @@ proc update(delta: float)
         camera
         stage/leveling
         world events
+        FIX SCENE RENDITION / PLAYER SPAWN POINT!!!!!!
 ]#
 
 
@@ -58,18 +68,16 @@ when isMainModule:
 
     start()
 
-    let tex = loadTexture("gemm.bmp", window.getRenderer) # typo for testing 
-    let stex = createSubTexture(tex, rect(0,0,100,100))
 
     var last = time()
     while running:
-        while sdl2.pollEvent(event):
-            if event.kind == sdl2.QuitEvent: stop()
+        while pollEvent(addr(event)) != 0:
+            if event.kind == Quit: stop()
             else: event.handle()
         
         # NOTE: do we like this???
-        framerate.limit(render)
-        tickrate.limit(update)
+        limit(update, tickrate)
+        limit(render, framerate)
 
         if time() - last > 1:
             echo framerate.count, " fps"
@@ -78,56 +86,56 @@ when isMainModule:
             tickrate.count = 0
             last = time()
 
-    terminate()
+    fin()
 
 #FUNC IMPL
 proc render(delta: float) =
     # delta probably wont be used
     renderer.clear()
     
-    renderer.setClearColor color(255, 0, 255, 255)
+    renderer.setClearColor color(120, 0, 120, 255)
 
-    stex.render(100, 100)
+    render(mainScene)
+
+    #render(stex, 400, 300)
+
     renderer.present()
+    window.refresh()
 
 proc update(delta: float) =
     input.update()
-
-    if UP.active: echo "UP"
-    if DOWN.active: echo "DOWN"
-    if LEFT.active: echo "LEFT"
-    if RIGHT.active: echo "RIGHT"
-    if ATTACK1.active: echo "ATTACK1"
-    if ATTACK2.active: echo "ATTACK2"
+    
+    mainScene.update(delta)
 
 proc init() =
-    sdl2.init(INIT_EVERYTHING)
-    window = 
-        sdl2.createWindow(
-        title.cstring,
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED, 
-        width.cint, 
-        height.cint,
-        SDL_WINDOW_RESIZABLE)
-    LOG(DEBUG, "created sdl2 windowptr")
+    discard sdl.init(INIT_EVERYTHING)
+    discard sdl_image.init(INIT_PNG or INIT_JPG)
+    discard glSetSwapInterval(0)
 
+    discard window.init()
     filesys.init()
     input.init(ESDF_BINDINGS)
-    renderer.init(window)
 
-proc terminate() =
-    tex.destroy()
-    renderer.destroy()
-    window.destroy()
+    mainScene = createScene(nil, createCamera())
+    var color = vec4f(1, 0, 0, 0)
+    drawQuad(100, 100, 100, 100, color = color)
 
-    # this shouldn't be need, but better safe than sorry, right?
+    #NOTE: Legacy
+    # let viewport = rect(0, 0, width, height)
+    # let pCamera = createCamera(viewport = viewport)
+    # pCamera.setOffset(0'f, 0'f)
+    # let level: Level = createLevel(joinPath(["assets","tiled","maptest.tmx"]), getRenderer())
+    # mainScene = createScene(level, pCamera)
+    # let tex = loadTexture("assets\\gemm.png", getRenderer()) # typo for testing
+    # let stex = createSubTexture(tex, rect(0,0,32,32))
+    # mainScene.player.setSprite(stex)
+
+proc fin() =
+    #destroy(tex)
+    renderer.terminate()
+    window.terminate()
+
+    # this shouldn't be needed, but better safe than sorry, right?
     system.addQuitProc(resetAttributes)
     
-    sdl2.quit()
-
-proc start() =
-    running = true
-
-proc stop() = 
-    running = false
+    sdl.quit()

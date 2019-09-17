@@ -4,11 +4,19 @@
     Purpose: handle user input and input bindings
 ]#
 
-import tables, marshal, streams, os, ospaths, math
+import 
+    tables,
+    marshal,
+    streams,
+    os,
+    math
 
-import sdl2
+import 
+    sdl2/sdl
 
-import eventhandler, filesys
+import 
+    eventhandler,
+    filesys
 
 #TODO: scroll wheel support
 
@@ -70,7 +78,8 @@ proc genInputStates*()
 #FUNC IMPL
 proc init*(binding: Table[Action, int]) =
     #TODO: get serialized bind data
-    deserialize()
+    binds = binding
+    #deserialize()
     genInputStates()
 
 
@@ -96,11 +105,11 @@ proc update*() =
     for event in eventhandler.input_q:
         case event.kind:
             of KeyDown:
-                if inputstates.hasKey(event.key.keysym.sym):
-                    inputstates[event.key.keysym.sym] = PRESSED
+                if inputstates.hasKey(int event.key.keysym.sym):
+                    inputstates[int event.key.keysym.sym] = PRESSED
             of KeyUp:
-                if inputstates.hasKey(event.key.keysym.sym):
-                    inputstates[event.key.keysym.sym] = RELEASED
+                if inputstates.hasKey(int event.key.keysym.sym):
+                    inputstates[int event.key.keysym.sym] = RELEASED
             of MouseButtonDown:
                 if inputstates.hasKey(int event.button.button):
                     inputstates[int event.button.button] = PRESSED

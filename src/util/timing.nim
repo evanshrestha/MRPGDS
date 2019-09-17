@@ -7,7 +7,8 @@
              function call timing
 ]#
 
-import sdl2
+import 
+    sdl2/sdl
 
 # TODO: multi-threading???
 
@@ -28,7 +29,7 @@ proc rate*(rate: float): Rate
 proc deltaFactor*(rate: float): float
 proc meanCalc*(rate: Rate): float
 
-proc limit*(rate: var Rate; function: proc(d: float = 0))
+proc limit*(function: proc(d: float = 0), rate: var Rate)
 
 #TEMPLATES
 template syscount*(): uint64 =
@@ -51,7 +52,7 @@ proc rate*(rate: float): Rate =
 proc meanCalc*(rate: Rate): float =
     return 1 / rate.mean
 
-proc limit*(rate: var Rate; function: proc(d: float = 0)) =
+proc limit*(function: proc(d: float = 0), rate: var Rate) =
     var now = time()
     var delta = now - rate.last
     rate.last = now
