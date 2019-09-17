@@ -92,14 +92,13 @@ when isMainModule:
 proc render(delta: float) =
     # delta probably wont be used
     renderer.clear()
-    
-    renderer.setClearColor color(120, 0, 120, 255)
 
     render(mainScene)
+    var color = vec4f(1, 0, 0, 0)
+    drawQuad(100, 100, 100, 100, angle = PI/4, color = color)
 
     #render(stex, 400, 300)
 
-    renderer.present()
     window.refresh()
 
 proc update(delta: float) =
@@ -110,15 +109,12 @@ proc update(delta: float) =
 proc init() =
     discard sdl.init(INIT_EVERYTHING)
     discard sdl_image.init(INIT_PNG or INIT_JPG)
-    discard glSetSwapInterval(0)
 
     discard window.init()
     filesys.init()
     input.init(ESDF_BINDINGS)
 
     mainScene = createScene(nil, createCamera())
-    var color = vec4f(1, 0, 0, 0)
-    drawQuad(100, 100, 100, 100, color = color)
 
     #NOTE: Legacy
     # let viewport = rect(0, 0, width, height)

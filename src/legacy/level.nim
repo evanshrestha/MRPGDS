@@ -13,6 +13,7 @@ import
   nim_tiled
 
 import
+  graphics/sprite,
   graphics/texture,
   util/logger,
   util/filesys,
@@ -22,10 +23,12 @@ import
 type
   Level* = ref object
     map: TiledMap
+    textures: seq[WTexture]
     scale: float
     time: int
 
   Tile = object
+    sprite: Sprite
     solid: bool
     action: proc()
 
@@ -41,25 +44,25 @@ proc `$`*(level: Level): string
 #GLOBAL VARS
 
 #FUNC IMPL
-proc createLevel*(path: string, renderer: Renderer): Level = discard
-  # let abspath = path.toAbsDir
-  # LOG(DEBUG, "loading tiled map at "&abspath)
+proc createLevel*(path: string, renderer: Renderer): Level =
+  let abspath = path.toAbsDir
+  LOG(DEBUG, "loading tiled map at "&abspath)
   
-  # var map = loadTiledMap(abspath)
+  var map = loadTiledMap(abspath)
   
-  # var textures: seq[WTexture]
-  # for tileset in map.tilesets:
-  #   let path = joinPath(["assets", "tiled", tileset.imagePath]).toAbsDir
-  #   textures.add(loadTexture(path, renderer))
+  var textures: seq[WTexture]
+  for tileset in map.tilesets:
+    let path = joinPath(["assets", "tiled", tileset.imagePath]).toAbsDir
+    textures.add(loadTexture(path, renderer))
 
-  # result = Level(
-  #   map: map,
-  #   textures: textures,
-  #   scale: 2,
-  #   time: 0
-  # )
-  # LOG(DEBUG, $result & "\n")
-  # LOG(DEBUG, "done!\n")
+  result = Level(
+    map: map,
+    textures: textures,
+    scale: 2,
+    time: 0
+  )
+  LOG(DEBUG, $result & "\n")
+  LOG(DEBUG, "done!\n")
 
 proc update(level: Level, delta: float) =
   discard
@@ -69,7 +72,7 @@ proc spawn(level: Level): Point2f =
 
 proc map*(level: Level): TiledMap {.inline.} = level.map
 proc scale*(level: Level): float {.inline.} = level.scale
-#proc texture*(level: Level, index: int): WTexture {.inline.} = level.textures[index]
+proc texture*(level: Level, index: int): WTexture {.inline.} = level.textures[index]
 proc tileWS*(level: Level): int {.inline.} = int(level.map.tilewidth.float*level.scale)
 proc tileHS*(level: Level): int {.inline.} = int(level.map.tileheight.float*level.scale)
 #proc time*(level: Level): int {.inline.} = level.time

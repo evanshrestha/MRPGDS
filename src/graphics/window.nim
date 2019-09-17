@@ -46,6 +46,8 @@ proc init(title: string, width, height: int): bool =
   var slv = $cast[cstring](glGetString(GL_SHADING_LANGUAGE_VERSION))
   LOG(DEBUG, &"[OPENGL] sys info:\n\t{ven}\n\t{ren}\n\t{ver}\n\t{slv}")
   
+  discard glSetSwapInterval(0)
+  
   renderer.init(window)
 
 

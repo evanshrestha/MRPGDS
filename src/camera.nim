@@ -43,8 +43,8 @@ proc setFocus*(camera: Camera, pos: Point2f) {.inline.} = camera.focus = pos
 proc createCamera*(focus: Point2f = nil): Camera =
   result = Camera(
     focus: focus,
-    proj: ortho(0'f32, 0, 800, 600, 0.01, 10),
-    view: mat4f(0).translate(0,0,1)
+    proj: ortho(0'f32, 800, 600, 0, -100, 100),
+    view: lookAt(vec3f(0, 0, 1), vec3f(0, 0, 0), vec3f(0, 1, 0))
   )
 
 proc update*(cam: var Camera, delta: float) = discard

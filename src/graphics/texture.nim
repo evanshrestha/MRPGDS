@@ -1,98 +1,99 @@
-#[
-    Created: Jan 8, 2019 [16:06]
+import os
+import sdl2/sdl, sdl2/sdl_image, glm, opengl
 
-    Purpose: TexturePtr Wrapper, primarily need texture size and default texture
-]#
+const
+  FlipH = 1
+  FLipV = 2
 
-import
-    ../util/logger,
-    ../util/misc,
-    ../util/filesys
+var defaultTexture: GLuint
+let defaultTexturePath = "res"/"textures"/"container.jpg"
 
-import 
-    os,
-    terminal
+#TODO: Defualt error texture
+proc createTexture*(path: string, flip: int = 0): GLuint
+proc flip(surf: var Surface, flags: int)
 
-import
-    sdl2/sdl,
-    sdl2/sdl_image
+proc DefaultTexture*(): GLuint =
+  if not glIsTexture(defaultTexture): defaultTexture = createTexture(defaultTexturePath)
+  defaultTexture
 
-#TYPE DECL
-type
-    STexture* = ref object
-        wtex: WTexture
-        srcrect: Rect
+proc createTexture*(path: string, flip: int): GLuint =
+  glGenTextures(1, addr result)
+  glActiveTexture(GL_TEXTURE0)
+  glBindTexture(GL_TEXTURE_2D, result)
 
-    WTexture* = ref object
-        src: Texture
-        width: cint
-        height: cint
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 
-#GLOBAL CONSTS
-#FUNC DECL
-proc loadTexture*(path: string; renderer: Renderer): WTexture
+  var surf = sdl_image.load(path)
+  if surf == nil:
+    echo "[SDL IMAGE] failed to load texture image"
+    #TODO: use def texture
+  
+  #flip texture
+  if flip != 0: surf.flip(flip)
 
-proc createSubTexture*(texture: WTexture, src: Rect): STexture
-proc createSubTexture*(texture: WTexture, x, y, w, h: cint): STexture
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB.GLint, surf.w, surf.h, 0, GL_RGB, GL_UNSIGNED_BYTE, surf.pixels)
+  glGenerateMipmap(GL_TEXTURE_2D)
 
-#NOTE: is this best way for a defualt texture
-proc createTextureOrGetDefault(surf: Surface, renderer: Renderer): WTexture
-proc getOrLoadDefaultTexture*(renderer: Renderer): WTexture
+  glBindTexture(GL_TEXTURE_2D, 0)
+  freeSurface(surf)
 
-proc destroy*(tex: WTexture)
-proc destroy*(tex: STexture)
+proc flip(surf: var Surface, flags: int) =
+  #let width = surf.w
+  let height = surf.h
+  let fmt = surf.format
 
-#GLOBAL FIELDS
-var default: WTexture = WTexture(src:nil);
+  #echo getPixelFormatName(fmt.format)
+  if mustLock(surf): discard lockSurface(surf)
 
-#FUNC IMPL
-proc loadTexture(path: string; renderer: Renderer): WTexture =
-    let abspath = path.toAbsDir()
-    let ext = abspath.splitFile.ext
-    var surf: Surface = 
-        if ext == ".bmp": loadBMP(abspath)
-        elif ext == ".png" or
-             ext == ".png" or 
-             ext == ".jpg" or 
-             ext == ".jpeg" or 
-             ext == ".jpe": load(abspath)
-        else: nil
-        
-    if surf == nil:
-        LOG(ERROR, "failed to load \""&abspath&"\" using default texture")
-    result = createTextureOrGetDefault(surf, renderer)
+  # pixels is modifable in ptrMath block
+  var pixels = cast[ptr uint32](surf.pixels)
 
-proc createSubTexture*(texture: WTexture, src: Rect): STexture = 
-    return STexture(wtex: texture, srcrect: src)
+  var pbuf: uint32
+  var s, e: int
+  let p = surf.pitch div 4 # Rima? why'd you turn fake on me?
+  case flags
+  of FLipV:
+    for y in 0..<int(height / 2):
+      for x in 0..<p:
+        s = x + y * p
+        e = x + (height - y - 1) * p
+        ptrMath:
+          pbuf = pixels[e]
+          pixels[e] = pixels[s]
+          pixels[s] = pbuf
+  of FlipH:
+    for y in 0..<height:
+      for x in 0..<p:
+        s = x + y * p
+        e = (p - x - 1) + y * p
+        ptrMath:
+          pbuf = pixels[e]
+          pixels[e] = pixels[s]
+          pixels[s] = pbuf
+  of FlipH and FLipV:
+    for y in 0..<height:
+      for x in 0..<p-y:
+        s = x + y * p
+        e = (p - x - 1) + (height - y - 1) * p
+        ptrMath:
+          pbuf = pixels[e]
+          pixels[e] = pixels[s]
+          pixels[s] = pbuf
+  else: return
 
-proc createSubTexture*(texture: WTexture, x, y, w, h: cint): STexture = 
-    return STexture(wtex: texture, srcrect: rect(x, y, w, h))
+  
+  if mustLock(surf): unlockSurface(surf)
 
-proc createTextureOrGetDefault(surf: Surface, renderer: Renderer): WTexture =
-    if surf != nil:
-        result = WTexture(src: renderer.createTextureFromSurface(surf), width: surf.w, height: surf.h)
-        if result.src == nil: return getOrLoadDefaultTexture(renderer)
-    else:
-        return getOrLoadDefaultTexture(renderer)
-
-proc getOrLoadDefaultTexture(renderer: Renderer): WTexture =
-    if default.src == nil:
-        let surf = loadBMP(joinPath(getAppDir(), "assets", "error.bmp"))
-        if surf == nil: LOG(FATAL, "could not find default texture file")
-        default = WTexture(src: renderer.createTextureFromSurface(surf), width: surf.w, height: surf.h)
-        if default.src == nil: LOG(FATAL, "failed to create texture from default texture file")
-    return default
-
-proc srcrect*(tex: STexture): Rect {.inline.} = tex.srcrect
-proc srcrectptr*(tex: STexture): ptr Rect {.inline.} = addr(tex.srcrect)
-proc wtex*(tex: STexture): WTexture {.inline.} = tex.wtex
-
-proc src*(tex: WTexture): Texture {.inline.} = tex.src
-proc width*(tex: WTexture): int {.inline.} = tex.width
-proc height*(tex: WTexture): int {.inline.} = tex.height
-
-proc destroy*(tex: WTexture) =
-    destroyTexture(tex.src)
-
-proc destroy*(tex: STexture) =
-    tex.wtex.destroy()
+  # var key: uint32 
+  # if getColorKey(surf, addr key) == 0:
+  #   result = createRGBSurface(SWSURFACE,
+  #     w, h, fmt.BitsPerPixel.cint,
+  #     fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask)
+  #   discard SDLCall(setColorKey(surf, 1, key))
+  # else:
+  #   result = createRGBSurface(SWSURFACE,
+  #     w, h, fmt.BitsPerPixel.cint,
+  #     fmt.Rmask, fmt.Gmask, fmt.Bmask, 0)

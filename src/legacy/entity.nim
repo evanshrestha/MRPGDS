@@ -21,6 +21,7 @@ type
 
   Entity* = ref object of RootObj
     bounds: Bounds
+    sprite: STexture
     case kind: EntityKind
     of light:
       dir: uint
@@ -42,6 +43,8 @@ proc update*(player: Player, delta: float)
 proc move(ent: Entity, magnitude: float, dir: float)
 proc bounds*(ent: Entity): Bounds {.inline.} = ent.bounds
 #TODO: actuall sprites lmao
+proc sprite*(ent: Entity): STexture {.inline.} = ent.sprite
+proc setSprite*(ent: Entity, sprite: STexture) {.inline.} = ent.sprite = sprite
 
 proc x*(ent: Entity): float {.inline.} = ent.bounds.x
 proc y*(ent: Entity): float {.inline.} = ent.bounds.y

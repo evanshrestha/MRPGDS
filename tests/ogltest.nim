@@ -1,5 +1,5 @@
 import os
-import sdl2/sdl, opengl, glm, graphics/shader
+import sdl2/sdl, opengl, glm, graphics/shader, graphics/texture
 
 var pos = WindowPosUndefined
 var width = 500
@@ -37,21 +37,23 @@ Quad.VERTICES = [
 Quad.INDICES = [0.GLuint, 1, 2, 0, 3, 2]
 const VoidZero = cast[pointer](0)
 
+var tex: GLuint
+
 var defaultShader = createShaderProgram("res"/"shaders"/"default.shader")
 # TODO: load these when creating shader
-discard defaultShader.loadUniform("uModel")
-discard defaultShader.loadUniform("uView")
-discard defaultShader.loadUniform("uProj")
-discard defaultShader.loadUniform("uQuadColor")
+echo defaultShader.loadUniform("uModel")
+echo defaultShader.loadUniform("uView")
+echo defaultShader.loadUniform("uProj")
+echo defaultShader.loadUniform("uQuadColor")
 
 glCreateVertexArrays(1, addr Quad.VAO)
 glBindVertexArray(Quad.VAO)
 
-glCreateBuffers(1, addr Quad.VBO)
+glCreateBuffers(2, addr Quad[0])
 glBindBuffer(GL_ARRAY_BUFFER, Quad.VBO)
 glBufferData(GL_ARRAY_BUFFER, sizeof(Vec3f) * Quad.VERTICES.len, addr Quad.VERTICES, GL_STATIC_DRAW)
 
-glCreateBuffers(1, addr Quad.EBO)
+
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad.EBO)
 glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * Quad.INDICES.len, addr Quad.INDICES, GL_STATIC_DRAW)
 
@@ -63,15 +65,17 @@ block mainloop:
 
   var x = 100'f32
   var y = 100'f32
-  var w = 100'f32
-  var h = 100'f32
+  var w = 32'f32
+  var h = 32'f32
   var scale = 1'f32
-  var angle = 0'f32
+  var angle = PI/4
   var color = vec4f(0.6, 0.4, 0.4, 1)
 
-  var proj = ortho(-2'f32, 2'f32, -2'f32, 2'f32, -100, 100)
-  #var proj = ortho(0.0'f32, width.float, height.float, 0, -100, 100)
-  var view = lookAt(vec3f(0,0,-1), vec3f(0,0,0), vec3f(0,1,0))
+  #var proj = ortho(-2'f32, 2'f32, -2'f32, 2'f32, -100, 100)
+  var proj = ortho(0.0'f32, width.float, height.float, 0, -100, 100)
+  var view = lookAt(vec3f(0,0,1), vec3f(0,0,0), vec3f(0,1,0))
+
+  tex = createTexture("bin"/"assets"/"32tile.jpg")
 
   while true:
     while pollEvent(addr event) != 0:
@@ -90,15 +94,20 @@ block mainloop:
 
     # perform transforms on unit mat4
     var model = mat4f(1)
+    model = translate(model, vec3f(x, y, 0))
+    
+    model = translate(model, vec3f(0.5 * (w*scale).float, 0.5 * (scale*h).float, 0.0))
+    model = rotate(model, angle, vec3f(0.0, 0.0, 1.0))
+    model = translate(model, vec3f(-0.5 * (w*scale).float, -0.5 * (scale*h).float, 0.0))
+    
+    model = scale(model, vec3f(w * scale, h * scale, 1))
     #model = rotate(model, angle, 0, 0, 1)
-    #model = translate(model, vec3f(-x, y, 0))
-    #model = scale(model, vec3f(w * scale, h * scale, 1))
     discard defaultShader.setUniformMat4v("uModel", false, caddr(model))
     
     # var loc = glGetUniformLocation(defaultShader.id, "uQuadColor")
     # glUniform4fv(loc, 1, caddr(color))
     discard defaultShader.setUniform4v("uQuadColor", caddr(color))
-    
+    glBindTexture(GL_TEXTURE_2D, tex)
     glBindVertexArray(Quad.VAO)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Quad.EBO)
 
@@ -106,6 +115,14 @@ block mainloop:
 
     glSwapWindow(window)
 
+
+destroy(defaultShader)
+    
+glDeleteBuffers(1, addr Quad.VBO)
+glDeleteBuffers(1, addr Quad.EBO)
+glDeleteVertexArrays(1, addr Quad.VAO)
+
+glDeleteTextures(1, addr tex)
 
 glDeleteContext(context)
 destroyWIndow(window)
