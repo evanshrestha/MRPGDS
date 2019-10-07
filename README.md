@@ -10,7 +10,7 @@ MRPGDS, multiplayer rpg dating sim, with action elements
 # Lifestyle? You Choose!
 Whether you want to live a life of monogamy or polygamy, it's your choice! (solitude is possible, but difficult)
 
-# Love Linked Combat 💕
+# Love-Linked Combat 💕
 Your love life directly affects your combat prowess
 
 # Unique and Dynamic Lovers
@@ -18,6 +18,11 @@ Every potential partner has a unique personality and how you interact with them 
 
 # Ideas List
 ## Classes
+![alt text](https://i.imgur.com/fdEbdqm.png "Heavy Concept 1")
+![alt text](https://i.imgur.com/c2o1DV8.png "Chad Wizard Sketch 1")
+![alt text](https://i.imgur.com/93LknSQ.png "Squishy Sketch 1")
+![alt text](https://i.imgur.com/JpDznbc.png "Assassin Sketch 1")
+
 ###
 
 ###
@@ -93,6 +98,7 @@ Obtain through quests and leveling, as well as talking to people with those trai
 
 
 ## Map
+![alt text](https://i.imgur.com/d8emNMY.png "Map Sketch 1")
 ### Areas
 ### Themes
 ###
