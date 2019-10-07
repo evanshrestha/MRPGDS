@@ -35,13 +35,19 @@ Every potential partner has a unique personality and how you interact with them 
 
 
 ## Characters
-Goals:
-### Male
-
-### Female
-
-### Nonbinary
-
+Goals:  
+### Concepts
+Ranger  
+Heavy  
+Assassin/Rogue  
+~STEM Major~ Scientist - Robotics?  
+Alchemist - Skill Editing  
+Android  
+Wizard  
+Tank  
+Dragon Knight  
+Obligatory Healer  
+Warlock type Mixed Heal/DPS  
 
 ## Mechanics
 1. **Combat Points**  
